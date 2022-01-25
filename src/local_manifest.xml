@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+  <!-- Device Source -->
+  <project path="device/camecho/yt9216bj" name="jake5253/device_china_yt9216bj" remote="github" revision="master" />
+</manifest>

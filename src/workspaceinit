@@ -1,0 +1,35 @@
+#!/bin/bash
+#
+# Init script
+#
+###########################################################
+# Create missing directories
+############################
+LOG_DIR=/workspace/log
+
+mkdir -p $SRC_DIR 
+mkdir -p $CCACHE_DIR
+mkdir -p $IMG_DIR
+mkdir -p $LOG_DIR
+
+DOCKER_LOG=$LOG_DIR/docker.log
+DEBUG_LOG=/dev/null
+if [ "$DEBUG" = true ]; then
+  DEBUG_LOG=$DOCKER_LOG
+fi
+[[ ! -f $DOCKER_LOG ]] && touch $DOCKER_LOG
+
+# Initialize CCache if it will be used
+if [ "$USE_CCACHE" = 1 ]; then
+  ccache -M $CCACHE_SIZE 2>&1 >>$DEBUG_LOG
+fi
+
+# Initialize Git user information
+git config --global user.name $USER_NAME
+git config --global user.email $USER_MAIL
+
+while [[ -z "$DEVICE_LIST" ]]; do
+  read -p "Enter list of devices to build for (separated by comma): " DEVICE_LIST
+done
+
+bash /workspace/userbins/buildtwrp
